@@ -146,6 +146,25 @@ Fabricator(:shopify_address, class_name: 'Hash') do
   after_build(&:stringify_keys!)
 end
 
+Fabricator(:shopify_fulfillment, class_name: 'Hash') do
+  initialize_with { raise 'Use attributes_for' }
+
+  id                    { Faker::Number.number(18).to_i }
+  created_at            { (rand(100) + 20).days.ago.iso8601 }
+  updated_at            { rand(20).days.ago.iso8601 }
+  service               'manual'
+  status                'success'
+  tracking_company      nil
+  tracking_number       nil
+  tracking_numbers      []
+  tracking_url          nil
+  tracking_urls         []
+  receipt               { {} }
+  line_items            { Array.new(rand(3) + 1) { Fabricate.attributes_for(:shopify_line_item) } }
+
+  after_build(&:stringify_keys!)
+end
+
 Fabricator(:shopify_line_item, class_name: 'Hash') do
   initialize_with { raise 'Use attributes_for' }
 
